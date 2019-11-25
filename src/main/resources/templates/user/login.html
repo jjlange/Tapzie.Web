@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Tapzie - Log in</title>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/1357c8c348.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<div>
+    <nav class="flex items-center justify-between flex-wrap p-3" style="background-image: url('/img/bg.png');background-repeat:no-repeat;
+background-size:cover; width: 100%;
+height: auto;">
+        <div class="flex items-center flex-shrink-0 text-white mr-6 lg:ml-16">
+            <svg class="fill-current h-10 w-10 mr-5 font-black" width="54" height="54" viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.5 22.1c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 38.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z"
+                />
+            </svg>
+            <span class="font-semibold tracking-tight text-3xl font-black" th:text="${title}"></span>&nbsp; <div class="rounded-full py-1 px-2 bg-gray-500 text-white font-black ml-2 mt-1 p-4">BETA</div>
+        </div>
+        <div class="block lg:hidden">
+            <button class="flex items-center px-3 py-2 border rounded text-white border-white hover:text-white hover:border-white">
+                <svg class="fill-current h-3 w-3 text-white" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <title>Menu</title>
+                    <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+                </svg>
+            </button>
+        </div>
+        <div class="w-full block flex-grow lg:items-center lg:w-auto hidden lg:flex">
+            <div class="text-sm lg:flex-grow pt-2">
+                <a href="/" class="block lg:inline-block lg:mt-0 text-white border-b-2 border-transparent hover:border-white text-xl p-2 ">
+                    Home
+                </a>
+                <a href="/what-is-tapzie" class="block mt-5 lg:inline-block lg:mt-0 text-white border-b-2 border-transparent hover:border-white mr-4 text-xl p-2 ">
+                    What is Tapzie?
+                </a>
+                <a href="/about" class="block mt-5 lg:inline-block lg:mt-0 text-white border-b-2 border-transparent hover:border-white text-xl p-2 ">
+                    About us
+                </a>
+            </div>
+            <div>
+                <a href="/signup" class="inline-block text-xl px-2 py-2 leading-none border bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mr-16">Sign Up</a>
+            </div>
+        </div>
+
+    </nav>
+</div>
+<div class="xl:w-full lg:w-full md:w-full  flex justify-center mt-12">
+    <img src="/img/user.png" class="w-24 h-24" />
+</div>
+<div class="lg:ml-2 xl:w-full lg:w-full md:w-full  flex justify-center mt-2">
+    <h2 class="text-3xl font-bold text-gray-900">Log into your account</h2>
+</div>
+<div class="lg:ml-2 xl:w-full lg:w-full md:w-full  flex justify-center mt-2 text-center">
+    <h3 class="text-base text-gray-700 font-bold">Hello and welcome back! Log into your account<br /> to experience every feature of Tapzie.</h3>
+</div>
+<div class="lg:ml-2 xl:w-full lg:w-full md:w-full  flex justify-center mt-2">
+    <div>
+        <form class="w-4/5 xl:w-full lg:w-full md:w-full max-w-lg mt-4" th:object="${userForm}" th:action="@{/login}" method="post">
+
+
+            <div class="flex flex-wrap -mx-3 mb-6">
+                <div class="w-full  px-3 mb-6 md:mb-0">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                        Email Address
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" th:field="*{email}" th:errorclass="has-error" type="text" placeholder="" name="Email" value="">
+                </div>
+            </div>
+
+            <div class="flex flex-wrap -mx-3 mb-6">
+                <div class="w-full px-3 mb-6 md:mb-0">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                        Password
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="password" th:field="*{password}" th:errorclass="has-error" placeholder="" name="Password" value="">
+                </div>
+            </div>
+
+            <div class="flex flex-wrap mb-2">
+                <div class="w-full md:w-3/5 mb-6 md:mb-0">
+                    <input name="login" class="w-3/4 inline-block text-xl py-4 leading-none border bg-red-500 hover:bg-red-400 text-white font-semibold w-full xl:w-2/3 lg:w-2/3 md:w-2/3   rounded-full mr-16" type="submit" value="Continue" />
+                </div><br />
+                <div class="mt-4"><a href="/signup?from=login" class="text-gray-600 hover:text-gray-900 font-bold py-2 px-2 rounded-full w-full xl:w-1/3 lg:w-1/3 md:w-1/3  mt-8">Not an account yet? &nbsp;<i class="fas fa-chevron-right"></i></a></div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- footer area -->
+<div class="mt-4 pb-6 pt-6">
+    <p class="mt-2 text-center">Copyright &copy; 2019, Tapzie. All Rights Reserved.</p>
+    <p class="internal_version_text text-center mt-2 font-bold">
+        development version
+    </p>
+</div>
+
+</body>
+
+</html>

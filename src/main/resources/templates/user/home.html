@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tapzie Dashboard: Home</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/font/stylesheet.css" />
+    <script src="https://kit.fontawesome.com/1357c8c348.js" crossorigin="anonymous"></script>
+    <link href="https://unpkg.com/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/@tailwindcss/custom-forms/dist/custom-forms.min.css" rel="stylesheet">
+    <!--Replace with your tailwind.css once created-->
+    <style>
+        .max-h-18em {
+            max-height: 24rem;
+        }
+        /*Quick overrides of the form input as using the CDN version*/
+        .form-input,
+        .form-textarea,
+        .form-select,
+        .form-multiselect {
+            background-color: #edf2f7;
+        }
+
+    </style>
+
+</head>
+
+<body class="bg-gray-100 text-gray-900 tracking-wider leading-normal">
+
+<nav id="header" class="bg-white fixed w-full z-10 top-0 shadow">
+
+    <div class="w-full container mx-auto flex flex-wrap items-center justify-between my-4">
+
+        <div class="pl-6 md:pl-6">
+            <a class="flex items-center text-orange-600 text-4xl xl:text-4xl no-underline hover:no-underline font-black font-sans" href="#" style="font-family: 'Cera Pro';font-weight: 900;">
+                Tapzie
+            </a>
+        </div>
+
+        <div class="pr-0 flex justify-end">
+
+            <div class="flex relative inline-block float-right">
+
+                <div class="relative text-sm">
+
+                    <button id="userButton" class="flex items-center mr-3 shadow bg-orange-700 hover:bg-orange-500 focus:shadow-outline focus:outline-none text-white text-sm md:text-base font-bold py-2 px-4 rounded">
+                        <span th:text="'' + ${firstName}" /></span>&nbsp;<span th:text="'' + ${lastName}" /></span>
+                        <svg class="pl-2 h-2 fill-current text-white" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129">
+                            <g>
+                                <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z" />
+                            </g>
+                        </svg>
+                    </button>
+
+                    <div id="userMenu" class="bg-white rounded shadow-md mt-2 mr-2 absolute mt-12 top-0 right-0 min-w-full overflow-auto z-30 invisible">
+                        <ul class="list-reset">
+                            <li><a href="/account" class="px-4 py-2 block hover:bg-gray-400 no-underline hover:no-underline">My Account</a></li>
+                            <li><a href="/notification" class="px-4 py-2 block hover:bg-gray-400 no-underline hover:no-underline">Notifications</a></li>
+                            <li>
+                                <hr class="border-t mx-2 border-gray-400">
+                            </li>
+                            <li><a href="/logout" class="px-4 py-2 block text-orange-600 font-bold hover:bg-orange-600 hover:text-white no-underline hover:no-underline">Sign out</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</nav>
+<!--Container-->
+<div class="container w-full flex flex-wrap mx-auto px-2 pt-8 lg:pt-16 mt-16">
+    <div class="w-full lg:w-1/5 px-6 text-xl text-gray-800 leading-normal">
+        <p class="text-2xl font-bold py-2 text-gray-700">Hello, <span th:text="'' + ${firstName}" /></span>!</p>
+        &nbsp; <div class="rounded-lg py-1 px-2 bg-yellow-600 text-white font-black p-2 text-center -mt-8">GOLD</div>
+        <div class="block lg:hidden sticky inset-0 pt-8">
+            <button id="menu-toggle" class="flex w-full justify-end px-3 py-3 bg-white lg:bg-transparent border rounded border-gray-600 hover:border-orange-600 appearance-none focus:outline-none">
+                <svg class="fill-current h-3 float-right" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+            </button>
+        </div>
+        <div class="w-full sticky inset-0 hidden max-h-18em lg:h-auto overflow-x-hidden overflow-y-auto lg:overflow-y-hidden lg:block mt-8 my-6 lg:my-6 border border-gray-400 lg:border-transparent bg-white shadow lg:shadow-none lg:bg-transparent z-20" style="top:6em;" id="menu-content">
+            <ul class="list-reset py-2 md:py-0">
+                <li class="py-1 md:my-2 hover:bg-orange-100 lg:hover:bg-transparent border-l-4 border-transparent font-bold border-orange-600">
+                    <a href='#section1' class="block pl-4 align-middle text-gray-700 no-underline hover:text-orange-600">
+                        <span class="pb-1 md:pb-0 text-2xl"><i class="fas fa-home pr-4"></i>Home</span>
+                    </a>
+                </li>
+                <li class="py-4 md:my-2 hover:bg-orange-100 lg:hover:bg-transparent border-l-4 border-transparent">
+                    <a href='#section2' class="block pl-4 align-middle text-gray-700 no-underline hover:text-orange-600">
+                        <span class="pb-1 md:pb-0 text-2xl"><i class="fas fa-graduation-cap pr-4"></i>Courses</span>
+                    </a>
+                </li>
+                <li class="py-4 md:my-2 hover:bg-orange-100 lg:hover:bg-transparent border-l-4 border-transparent">
+                    <a href='#section3' class="block pl-4 align-middle text-gray-700 no-underline hover:text-orange-600">
+                        <span class="pb-1 md:pb-0 text-2xl"><i class="fas fa-envelope pr-6"></i>Messages</span>
+                    </a>
+                </li>
+                <li class="py-4 md:my-2 hover:bg-orange-100 lg:hover:bg-transparent border-l-4 border-transparent">
+                    <a href='#section4' class="block pl-4 align-middle text-gray-700 no-underline hover:text-orange-600">
+                        <span class="pb-1 md:pb-0 text-2xl"><i class="fas fa-users pr-4"></i>Friends</span>
+                    </a>
+                </li>
+
+                <li class="py-4 md:my-2 hover:bg-orange-100 lg:hover:bg-transparent border-l-4 border-transparent">
+                    <a href='#section5' class="block pl-4 align-middle text-gray-700 no-underline hover:text-orange-600">
+                        <span class="pb-1 md:pb-0 text-2xl"><i class="fas fa-question-circle pr-6"></i>Help</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!--Section container-->
+    <section class="w-full lg:w-4/5">
+
+        <!--Title-->
+        <h1 class="flex items-center font-sans font-bold break-normal text-gray-700 px-2 text-3xl pt-1 mt-14 lg:mt-14 md:text-3xl">
+            Home
+        </h1>
+
+        <!--divider-->
+        <hr class="bg-gray-300 my-2 mb-8">
+        <!--Card-->
+        <div class="p-4 pl-8 mt-8 lg:mt-0 bg-gray-700 leading-normal rounded-tl rounded-tr rounded-t shadow bg-white">
+            <h2 id='section1' class="font-sans font-bold break-normal text-white text-2xl">
+                Dashboard
+            </h2>
+        </div>
+        <div class="w-full border-l border-r border-b border-gray-700 rounded-bl rounded-br rounded-b flex flex-col justify-center items-center text-center p-6 bg-white">
+            <div class="text-md font-bold flex flex-col text-gray-900"><span class="uppercase" th:text="'What\'s up for today, ' + ${firstName} + '?'" /></span> <span class="font-normal text-gray-700 text-sm" th:text="${#dates.format(#dates.createNow(), 'dd / MMMM / YYYY')}">dd/MMM/YYYY</span></div>
+
+            <div class="text-2xl font-bold text-gray-900 mb-6 mt-8">We couldn't find any suggestions for you. :(</div>
+            <div class="flex justify-between w-full mt-4">
+                <div class="flex items-center text-gray-700 px-2">
+                    Link 1
+                </div>
+                <div class="flex items-center text-gray-700 px-2">
+                    Link 2
+                </div>
+            </div>
+        </div>
+        <br />
+        <div id="map" class="w-full h-64 rounded-lg">
+        </div>
+    </section>
+    <script>
+mapboxgl.accessToken = 'pk.eyJ1Ijoic3VzaGlsa29rYXRlIiwiYSI6ImNqcmVxeDVqeDA0c2c0NHNjcGM0Yzg4YmwifQ.NKebcVLWrkSssYyLp26Lnw';
+
+// This adds the map to your page
+
+if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(position => {
+        var map = new mapboxgl.Map({
+            // container id specified in the HTML
+              container: 'map',
+
+               // style URL
+              style: 'mapbox://styles/mapbox/streets-v11',
+
+             // initial position in [lon, lat] format
+              center: [position.coords.longitude, position.coords.latitude],
+
+
+             // initial zoom
+
+             zoom: 14
+        });
+        map.on("load", function () {
+/* Image: An image is loaded and added to the map. */
+map.loadImage("https://i.ibb.co/0VftskD/icons8-final-state-40.png", function(error, image) {
+if (error) throw error;
+map.addImage("custom-marker", image);
+/* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
+map.addLayer({
+id: "markers",
+type: "symbol",
+/* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
+source: {
+type: "geojson",
+data: {
+type: 'FeatureCollection',
+features: [
+{
+type: 'Feature',
+properties: {},
+geometry: {
+type: "Point",
+coordinates: [position.coords.longitude, position.coords.latitude]
+}
+}
+]
+}
+},
+layout: {
+"icon-image": "custom-marker",
+}
+});
+});
+});
+    });
+} else { /* geolocation IS NOT available, handle it */ }
+</script>
+
+    </section>
+
+</div>
+
+
+<script>
+/*https://gist.github.com/slavapas/593e8e50cf4cc16ac972afcbad4f70c8*/
+var userMenuDiv = document.getElementById("userMenu");
+var userMenu = document.getElementById("userButton");
+ var helpMenuDiv = document.getElementById("menu-content");
+ var helpMenu = document.getElementById("menu-toggle");
+document.onclick = check;
+function check(e){
+  var target = (e && e.target) || (event && event.srcElement);
+  //User Menu
+  if (!checkParent(target, userMenuDiv)) {
+    // click NOT on the menu
+    if (checkParent(target, userMenu)) {
+      // click on the link
+      if (userMenuDiv.classList.contains("invisible")) {
+        userMenuDiv.classList.remove("invisible");
+      } else {userMenuDiv.classList.add("invisible");}
+    } else {
+      // click both outside link and outside menu, hide menu
+      userMenuDiv.classList.add("invisible");
+    }
+  }
+   //Help Menu
+   if (!checkParent(target, helpMenuDiv)) {
+    // click NOT on the menu
+    if (checkParent(target, helpMenu)) {
+      // click on the link
+      if (helpMenuDiv.classList.contains("hidden")) {
+        helpMenuDiv.classList.remove("hidden");
+      } else {helpMenuDiv.classList.add("hidden");}
+    } else {
+      // click both outside link and outside menu, hide menu
+      helpMenuDiv.classList.add("hidden");
+    }
+   }
+}
+function checkParent(t, elm) {
+  while(t.parentNode) {
+    if( t == elm ) {return true;}
+    t = t.parentNode;
+  }
+  return false;
+}
+</script>
+
+<!-- jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+<!-- Scroll Spy -->
+<script>
+/* http://jsfiddle.net/LwLBx/ */
+// Cache selectors
+var lastId,
+    topMenu = $("#menu-content"),
+    topMenuHeight = topMenu.outerHeight()+175,
+    // All list items
+    menuItems = topMenu.find("a"),
+    // Anchors corresponding to menu items
+    scrollItems = menuItems.map(function(){
+      var item = $($(this).attr("href"));
+      if (item.length) { return item; }
+    });
+// Bind click handler to menu items
+// so we can get a fancy scroll animation
+menuItems.click(function(e){
+  var href = $(this).attr("href"),
+      offsetTop = href === "#" ? 0 : $(href).offset().top-topMenuHeight+1;
+  $('html, body').stop().animate({
+      scrollTop: offsetTop
+  }, 300);
+  if (!helpMenuDiv.classList.contains("hidden")) {
+        helpMenuDiv.classList.add("hidden");
+      }
+  e.preventDefault();
+});
+// Bind to scroll
+$(window).scroll(function(){
+   // Get container scroll position
+   var fromTop = $(this).scrollTop()+topMenuHeight;
+   // Get id of current scroll item
+   var cur = scrollItems.map(function(){
+     if ($(this).offset().top < fromTop)
+       return this;
+   });
+   // Get the id of the current element
+   cur = cur[cur.length-1];
+   var id = cur && cur.length ? cur[0].id : "";
+   if (lastId !== id) {
+       lastId = id;
+       // Set/remove active class
+       menuItems
+         .parent().removeClass("font-bold border-orange-600")
+         .end().filter("[href='#"+id+"']").parent().addClass("font-bold border-orange-600");
+   }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title th:text="'' + ${profile.firstName} + '\'s profile'">Tapzie</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/1357c8c348.js" crossorigin="anonymous"></script>
+    <link href="https://unpkg.com/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/@tailwindcss/custom-forms/dist/custom-forms.min.css" rel="stylesheet">
+    <!--Replace with your tailwind.css once created-->
+    <style>
+        .max-h-18em {
+            max-height: 24rem;
+        }
+        /*Quick overrides of the form input as using the CDN version*/
+        .form-input,
+        .form-textarea,
+        .form-select,
+        .form-multiselect {
+            background-color: #edf2f7;
+        }
+
+    </style>
+
+    <style>
+    .modal {
+      transition: opacity 0.25s ease;
+    }
+    body.modal-active {
+      overflow-x: hidden;
+      overflow-y: visible !important;
+    }
+
+    .TapListMenu>ul {
+  display: none;
+}
+  </style>
+
+</head>
+
+<body class="bg-gray-100 text-gray-900 tracking-wider leading-normal">
+
+<nav id="header" class="bg-white fixed w-full z-10 top-0 shadow">
+
+    <div class="w-full container mx-auto flex flex-wrap items-center justify-between my-4">
+
+        <div class="pl-6 md:pl-6">
+            <a class="flex items-center text-gray-700 text-4xl xl:text-4xl no-underline hover:no-underline font-black font-sans" href="#">
+                Tapzie
+            </a>
+        </div>
+
+        <div class="pr-0 flex justify-end">
+
+            <div class="flex relative inline-block float-right">
+
+                <div class="relative text-sm">
+
+                    <button id="userButton" class="flex items-center mr-3 shadow bg-gray-600 hover:bg-gray-700 focus:shadow-outline focus:outline-none text-white text-sm md:text-base font-bold py-2 px-4 rounded">
+                        <span th:text="'' + ${user.firstName}" /></span>&nbsp;<span th:text="'' + ${user.lastName}" /></span>
+                        <svg class="pl-2 h-2 fill-current text-white" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129">
+                            <g>
+                                <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z" />
+                            </g>
+                        </svg>
+                    </button>
+
+                    <div id="userMenu" class="bg-white rounded shadow-md mt-2 mr-2 absolute mt-12 top-0 right-0 min-w-full overflow-auto z-30 invisible">
+                        <ul class="list-reset">
+                            <li><a href="/profile" class="px-4 py-2 block hover:bg-gray-400 no-underline hover:no-underline">My Account</a></li>
+                            <li><a href="/notifications" class="px-4 py-2 block hover:bg-gray-400 no-underline hover:no-underline">Notifications</a></li>
+                            <li>
+                                <hr class="border-t mx-2 border-gray-400">
+                            </li>
+                            <li><a href="/logout" class="px-4 py-2 block text-gray-700 font-bold hover:bg-gray-700 hover:text-white no-underline hover:no-underline">Sign out</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</nav>
+<!--Container-->
+<div id="app" class="container w-full flex flex-wrap mx-auto px-2 pt-8 lg:pt-16 mt-16">
+    <div class="w-full lg:w-1/5 px-6 text-xl text-gray-800 leading-normal">
+        <p class="text-2xl font-bold py-2 text-gray-700">Hello, <span th:text="'' + ${user.firstName}" /></span>!</p>
+        &nbsp; <div class="rounded-lg py-1 px-2 bg-yellow-600 text-white font-black p-2 text-center -mt-8">GOLD</div>
+        <div class="block lg:hidden sticky inset-0 pt-8">
+            <button id="menu-toggle" class="flex w-full justify-end px-3 py-3 bg-white lg:bg-transparent border rounded border-teal-600 hover:border-orange-600 appearance-none focus:outline-none">
+                <svg class="fill-current h-3 float-right" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+            </button>
+        </div>
+        <div class="w-full sticky inset-0 hidden max-h-18em lg:h-auto overflow-x-hidden overflow-y-auto lg:overflow-y-hidden lg:block mt-8 my-6 lg:my-6 border border-gray-400 lg:border-transparent bg-white shadow lg:shadow-none lg:bg-transparent z-20" style="top:6em;" id="menu-content">
+            <ul class="list-reset py-2 md:py-0">
+                <li class="py-1 md:my-2 hover:bg-orange-100 lg:hover:bg-transparent border-l-4 border-transparent">
+                    <a href='/home' class="block pl-4 align-middle text-gray-700 no-underline hover:text-gray-800 border-l-4 hover:border-gray-800">
+                        <span class="pb-1 md:pb-0 text-2xl"><i class="fas fa-home pr-4"></i>Home</span>
+                    </a>
+                </li>
+                <li class="py-4 md:my-2 hover:bg-orange-100 lg:hover:bg-transparent border-l-4 border-transparent">
+                    <a href='/Courses' class="block pl-4 align-middle text-gray-700 no-underline hover:text-gray-800 border-l-4 hover:border-gray-800">
+                        <span class="pb-1 md:pb-0 text-2xl"><i class="fas fa-graduation-cap pr-4"></i>Courses</span>
+                    </a>
+                </li>
+                <li class="py-4 md:my-2 hover:bg-orange-100 lg:hover:bg-transparent border-l-4 border-transparent">
+                    <a href='/Messages' class="block pl-4 align-middle text-gray-700 no-underline hover:text-gray-800 border-l-4 hover:border-gray-800">
+                        <span class="pb-1 md:pb-0 text-2xl"><i class="fas fa-envelope pr-6"></i>Messages</span>
+                    </a>
+                </li>
+                <li class="py-4 md:my-2 hover:bg-orange-100 lg:hover:bg-transparent border-l-4 border-transparent">
+                    <a href='/Friends' class="block pl-4 align-middle text-gray-700 no-underline hover:text-gray-800 border-l-4 hover:border-gray-800">
+                        <span class="pb-1 md:pb-0 text-2xl"><i class="fas fa-users pr-4"></i>Friends</span>
+                    </a>
+                </li>
+
+                <li class="py-4 md:my-2 hover:bg-orange-100 lg:hover:bg-transparent border-l-4 border-transparent">
+                    <a href='/Help' class="block pl-4 align-middle text-gray-700 no-underline hover:text-gray-800 border-l-4 hover:border-gray-800">
+                        <span class="pb-1 md:pb-0 text-2xl"><i class="fas fa-question-circle pr-6"></i>Help</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!--Section container-->
+    <section class="w-full lg:w-4/5">
+
+        <div class="p-4 pl-20 mt-10 lg:mt-4 bg-gray-600 leading-normal rounded shadow h-auto"  th:style="'background-image: url('+ ${profile.profileBackgroundPicture} +');  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;'"><div class="flex">
+            <div class="w-3/4 md:w-1/4 xl:w-1/4 p-2">
+                <img class="h-32 w-32 rounded-full mx-auto border-2 border-white" th:src="${profile.profilePicture}">
+                <h2 id='section1' class="font-sans pt-1 font-bold break-normal text-gray-100 text-3xl mx-auto text-center font-black">
+                <span style="text-shadow: 0 0 2px #000;
+  -moz-text-shadow: 0 0 2px #000;
+  -webkit-text-shadow: 0 0 2px #000" th:text="'' + ${profile.firstName}" /></span> <span  style="text-shadow: 0 0 2px #000;
+  -moz-text-shadow: 0 0 2px #000;
+  -webkit-text-shadow: 0 0 2px #000" th:text="'' + ${profile.lastName}" /></span><br/>
+                    <a th:if="${user.id == profile.id}" href="/profile/edit" id='' class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-6 border border-gray-400 rounded shadow text-base">
+                        Edit Your Profile
+                    </a>
+                </h2></div>
+            <div class="w-1/4 md:w-3/4 xl:w-3/4 text-right float-right mt-3 pr-3">
+                <a th:if="${user.id == profile.id}" href="/Account/ProfileBackground/Change" id='' class="">
+                    <i class="fas fa-pen-square text-gray-100 hover:text-gray-300 text-4xl"></i>
+                </a></div>
+        </div>
+        </div>
+        <br />
+        <div class="mb-4">
+            <button th:if="${user.id == profile.id}" class="modal-open bg-transparent border border-gray-500 hover:border-indigo-500 text-gray-500 hover:text-indigo-500 font-bold w-40 h-10 rounded-full float-right mb-4">Create new Tap</button>
+        </div>
+        <br />
+        <div th:each = "tap: ${taps}" class="flex border-b border-solid border-grey-light mt-4">
+            <div class="w-1/8 text-right pl-3 pt-3">
+                <div><a href="#"><img th:src="${profile.profilePicture}" alt="avatar" class="rounded-full h-12 w-12 mr-2"></a></div>
+            </div>
+            <div class="w-full p-3 pl-4">
+                <div class="flex -mb-2 justify-between">
+                    <div>
+                        <span class="font-bold"><a href="#" class="text-black" th:text="'' + ${profile.firstName} + ' ' + ${profile.lastName}"></a></span>
+                        <span class="text-grey-dark">&nbsp;·</span>
+                        <a href="" th:href="'/user/' + ${profile.id}" class="text-blue-400 hover:text-blue-500 pl-2" th:text="'@' + ${profile.username}"></a>
+                        <span class="text-grey-dark">&nbsp;·&nbsp;</span>
+                        <span class="text-grey-dark" th:text="${#dates.format(tap.createdDate, 'dd / MMM / YYYY')}">dd</span>
+                    </div>
+                    <div>
+                        <div class="TapListMenu">
+                            <a class="text-2xl float-right text-right" style="cursor:pointer;">
+                                <i class="fa fa-chevron-down"></i>
+                            </a>
+                            <ul class="list-reset bg-white rounded shadow-md mt-2 mr-2  mt-12 min-w-full ">
+                                <li><a href="#" class="px-4 py-2 block hover:bg-gray-400 no-underline hover:no-underline">My Account</a></li>
+                                <li><a href="#" class="px-4 py-2 block hover:bg-gray-400 no-underline hover:no-underline">Notifications</a></li>
+                                <li>
+                                    <hr class="border-t mx-2 border-gray-400">
+                                </li>
+                                <li><a href="/Account/SignOut" class="px-4 py-2 block text-gray-700 font-bold hover:bg-gray-700 hover:text-white no-underline hover:no-underline">Sign out</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-4 text-2xl">
+                    <p class="mb-6" th:text="'' + ${tap.content}"></p>
+                </div>
+                <div class="pb-2">
+                    <span class="mr-8"><a href="#" class="text-grey-dark hover:no-underline hover:text-blue-light"><i class="fa fa-comment fa-lg mr-2"></i> 0</a></span>
+                    <span class="mr-8"><a href="#" class="text-grey-dark hover:no-underline hover:text-green"><i class="fa fa-retweet fa-lg mr-2"></i> 0</a></span>
+                    <span class="mr-8"><a href="#" class="text-grey-dark hover:no-underline hover:text-red"><i class="fa fa-heart fa-lg mr-2"></i> 0</a></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+
+<script>
+/*https://gist.github.com/slavapas/593e8e50cf4cc16ac972afcbad4f70c8*/
+var userMenuDiv = document.getElementById("userMenu");
+var userMenu = document.getElementById("userButton");
+
+
+document.onclick = check;
+
+function check(e){
+  var target = (e && e.target) || (event && event.srcElement);
+  //User Menu
+  if (!checkParent(target, userMenuDiv)) {
+    // click NOT on the menu
+    if (checkParent(target, userMenu)) {
+      // click on the link
+      if (userMenuDiv.classList.contains("invisible")) {
+        userMenuDiv.classList.remove("invisible");
+      } else {userMenuDiv.classList.add("invisible");}
+    } else {
+      // click both outside link and outside menu, hide menu
+      userMenuDiv.classList.add("invisible");
+    }
+  }
+
+}
+function checkParent(t, elm) {
+  while(t.parentNode) {
+    if( t == elm ) {return true;}
+    t = t.parentNode;
+  }
+  return false;
+}
+</script>
+
+<!-- jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+<!-- Scroll Spy -->
+<script>
+/* http://jsfiddle.net/LwLBx/ */
+// Cache selectors
+var lastId,
+    topMenu = $("#menu-content"),
+    topMenuHeight = topMenu.outerHeight()+175,
+    // All list items
+    menuItems = topMenu.find("a"),
+    // Anchors corresponding to menu items
+    scrollItems = menuItems.map(function(){
+      var item = $($(this).attr("href"));
+      if (item.length) { return item; }
+    });
+// Bind click handler to menu items
+// so we can get a fancy scroll animation
+menuItems.click(function(e){
+  var href = $(this).attr("href"),
+      offsetTop = href === "#" ? 0 : $(href).offset().top-topMenuHeight+1;
+  $('html, body').stop().animate({
+      scrollTop: offsetTop
+  }, 300);
+  if (!helpMenuDiv.classList.contains("hidden")) {
+        helpMenuDiv.classList.add("hidden");
+      }
+  e.preventDefault();
+});
+// Bind to scroll
+$(window).scroll(function(){
+   // Get container scroll position
+   var fromTop = $(this).scrollTop()+topMenuHeight;
+   // Get id of current scroll item
+   var cur = scrollItems.map(function(){
+     if ($(this).offset().top < fromTop)
+       return this;
+   });
+   // Get the id of the current element
+   cur = cur[cur.length-1];
+   var id = cur && cur.length ? cur[0].id : "";
+   if (lastId !== id) {
+       lastId = id;
+       // Set/remove active class
+       menuItems
+         .parent().removeClass("font-bold border-orange-600")
+         .end().filter("[href='#"+id+"']").parent().addClass("font-bold border-orange-600");
+   }
+});
+
+</script>
+</body>
+<!--Modal-->
+<div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
+    <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+
+    <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+
+        <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
+            <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+            </svg>
+            <span class="text-sm">(Esc)</span>
+        </div>
+
+        <!-- Add margin if you want to see some of the overlay behind the modal-->
+        <div class="modal-content py-4 text-left px-6">
+            <!--Title-->
+            <div class="flex justify-between items-center pb-3">
+                <p class="text-2xl font-bold">Create a new Tap</p><br />
+                <div class="modal-close cursor-pointer z-50">
+                    <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                        <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                    </svg>
+                </div>
+            </div>
+                <form class="mt-4" th:object="${tapCreateForm}" th:action="@{/create/tap}" method="post">
+
+
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                                Content:
+                    </label>
+                    <textarea class="appearance-none block w-full text-2xl bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" th:field="*{content}" th:errorclass="has-error" type="text" placeholder="What would you like to write about?" name="" value=""></textarea>
+                    <input name="login" class="flex items-center shadow bg-gray-600 hover:bg-gray-700 focus:shadow-outline focus:outline-none text-white text-sm md:text-base font-bold py-2 px-4 mb-2 rounded float-right" type="submit" value="Create" />
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<script>
+    var openmodal = document.querySelectorAll('.modal-open')
+    for (var i = 0; i < openmodal.length; i++) {
+      openmodal[i].addEventListener('click', function(event){
+    	event.preventDefault()
+    	toggleModal()
+      })
+    }
+
+    const overlay = document.querySelector('.modal-overlay')
+    overlay.addEventListener('click', toggleModal)
+
+    var closemodal = document.querySelectorAll('.modal-close')
+    for (var i = 0; i < closemodal.length; i++) {
+      closemodal[i].addEventListener('click', toggleModal)
+    }
+
+    document.onkeydown = function(evt) {
+      evt = evt || window.event
+      var isEscape = false
+      if ("key" in evt) {
+    	isEscape = (evt.key === "Escape" || evt.key === "Esc")
+      } else {
+    	isEscape = (evt.keyCode === 27)
+      }
+      if (isEscape && document.body.classList.contains('modal-active')) {
+    	toggleModal()
+      }
+    };
+
+
+    function toggleModal () {
+      const body = document.querySelector('body')
+      const modal = document.querySelector('.modal')
+      modal.classList.toggle('opacity-0')
+      modal.classList.toggle('pointer-events-none')
+      body.classList.toggle('modal-active')
+    }
+
+$(document).on('click', function(e) {
+  $('.TapListMenu > ul').hide();
+
+  if ($(e.target).parent().hasClass('TapListMenu')) {
+    $(e.target).siblings('ul').toggle();
+  }
+});
+  </script>
+
+</html>
