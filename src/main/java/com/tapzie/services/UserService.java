@@ -27,7 +27,10 @@ public interface UserService {
 
     Integer userCountByAuthKey(String authkey);
 
+    Integer userCountByUsername(String username);
+
     User findByAuthKey(String authkey);
 
     UUID userIdByEmail(String email);
+
 }

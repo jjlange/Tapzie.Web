@@ -97,7 +97,7 @@ class UserController {
     public String newUser(@CookieValue(value = "AuthKey", defaultValue = "0") String authKey, Model model){
         if(userService.userCountByAuthKey(authKey) == 0) {
             model.addAttribute("userForm", new User());
-            return "user/signup";
+            return "user/signup/index";
         } else {
             return "redirect:/home";
         }
@@ -121,19 +121,55 @@ class UserController {
             return "user/login";
         }
 
+        String authkey = AuthKey.create();
+
         User user = new User();
         user.setId(UUID.randomUUID());
         user.setEmail(userForm.getEmail());
         user.setPassword(Hash256.convert(userForm.getPassword()));
-        user.setUsername(userForm.getUsername());
         user.setFirstName(userForm.getFirstName());
         user.setLastName(userForm.getLastName());
+        user.setAuthKey(authkey);
 
         UUID fileNameUUID = UUID.randomUUID();
         storageService.uploadFile(image, fileNameUUID + image.getOriginalFilename());
         user.setProfilePicture(imgCDNPath + fileNameUUID + image.getOriginalFilename());
         userService.saveOrUpdate(user);
-        return "redirect:/login";
+
+
+        Cookie cookie = new Cookie("AuthKey", authkey);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        return "redirect:/signup/username";
+    }
+
+    @RequestMapping(value="/signup/username", method=RequestMethod.POST)
+    public String setUsername(@CookieValue(value = "AuthKey", defaultValue = "0") String authKey, HttpServletResponse response, @Valid UserForm userForm, BindingResult bindingResult, Model model) {
+        if(bindingResult.hasErrors()) {
+            return "user/login";
+        }
+
+        User user = userService.findByAuthKey(authKey);
+        Integer userCount = userService.userCountByUsername(userForm.getUsername());
+
+        if(userCount > 0) {
+            model.addAttribute("error_username_not_available", true);
+            return "user/signup/set_username";
+        } else {
+            user.setUsername(userForm.getUsername());
+            userService.saveOrUpdate(user);
+            return "redirect:/login";
+        }
+    }
+
+    @RequestMapping("/signup/username")
+    public String signupUsername(@CookieValue(value = "AuthKey", defaultValue = "0") String authKey, Model model){
+        if(userService.userCountByAuthKey(authKey) == 0) {
+            return "redirect:/login";
+        } else {
+            model.addAttribute("userForm", new User());
+            return "/user/signup/set_username";
+        }
     }
 
     @RequestMapping("/login")
@@ -170,7 +206,9 @@ class UserController {
                 if (passwordCount == 0) {
                     return "redirect:/login";
                 } else {
+
                     UUID userId = userService.userIdByEmail(userForm.getEmail());
+
                     String authkey = AuthKey.create();
 
 

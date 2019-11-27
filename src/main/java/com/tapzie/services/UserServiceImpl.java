@@ -61,6 +61,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Integer userCountByUsername(String username) {
+        return userRepository.userRowCountByUsername(username);
+    }
+
+    @Override
     public User findByAuthKey(String authkey) {
         return userRepository.findByAuthKey(authkey);
     }

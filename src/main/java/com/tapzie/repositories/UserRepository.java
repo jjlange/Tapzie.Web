@@ -23,6 +23,9 @@ public interface UserRepository extends CassandraRepository<User, UUID> {
     @Query("SELECT * FROM users WHERE authkey=?0")
     User findByAuthKey(String authkey);
 
+    @Query("SELECT COUNT(*) FROM users WHERE username=?0")
+    Integer userRowCountByUsername(String username);
+
     @Query("SELECT id FROM users WHERE email=?0")
     UUID  userIdByEmail(String email);
 }

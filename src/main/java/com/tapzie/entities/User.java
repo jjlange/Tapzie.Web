@@ -1,6 +1,7 @@
 package com.tapzie.entities;
 
 import com.datastax.driver.core.DataType;
+import jnr.ffi.annotations.In;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +25,8 @@ public class User implements Serializable{
 
     @Indexed
     private String password;
+
+    @Indexed
     private String username;
 
     @Indexed
