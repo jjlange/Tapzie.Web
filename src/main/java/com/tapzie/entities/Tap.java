@@ -1,36 +1,46 @@
 package com.tapzie.entities;
 
-
-import com.datastax.driver.core.DataType;
-import org.springframework.data.cassandra.core.mapping.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
-@Table("taps")
+@Entity
+@Table(name="taps")
 public class Tap implements Serializable {
 
-    @PrimaryKey
-    @CassandraType(type = DataType.Name.UUID)
-    private UUID id;
+    @Id
+    @GeneratedValue
+    @Column(name="id")
+    private Long id;
 
+    @Column(name="content")
     private String content;
 
-    private UUID userId;
+    @Column(name="userId")
+    private Long userId;
 
+    @Column(name="createdDate")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'hh:mm")
     private Date createdDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId", insertable = false, updatable = false)
+    @Fetch(FetchMode.JOIN)
+    private User user;
 
     public Tap() {
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -42,11 +52,11 @@ public class Tap implements Serializable {
         content = Content;
     }
 
-    public void setUserID(UUID uID) {
+    public void setUserID(Long uID) {
         userId = uID;
     }
 
-    public UUID getUserID() { return userId; }
+    public Long getUserID() { return userId; }
 
     public void setCreatedDate(Date date) {
         createdDate = date;

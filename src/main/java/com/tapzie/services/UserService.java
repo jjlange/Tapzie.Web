@@ -4,7 +4,6 @@ import com.tapzie.commands.UserForm;
 import com.tapzie.entities.User;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by jt on 1/10/17.
@@ -13,11 +12,11 @@ public interface UserService {
 
     List<User> listAll();
 
-    User getById(UUID id);
+    User getById(Long id);
 
     User saveOrUpdate(User user);
 
-    void delete(UUID id);
+    void delete(Long id);
 
     User saveOrUpdateUserForm(UserForm userForm);
 
@@ -31,6 +30,6 @@ public interface UserService {
 
     User findByAuthKey(String authkey);
 
-    UUID userIdByEmail(String email);
+    Long userIdByEmail(String email);
 
 }

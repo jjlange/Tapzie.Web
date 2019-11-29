@@ -5,6 +5,7 @@ import com.tapzie.commands.UserForm;
 import com.tapzie.converters.UserToUserForm;
 import com.tapzie.entities.Tap;
 import com.tapzie.entities.User;
+import com.tapzie.repositories.TapRepository;
 import com.tapzie.services.StorageService;
 import com.tapzie.services.TapService;
 import com.tapzie.services.UserService;
@@ -22,8 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.lang.reflect.Array;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -37,6 +41,7 @@ class UserController {
     private UserService userService;
 
     private TapService tapService;
+    private TapRepository tapRepository;
 
     private UserToUserForm userToUserForm;
 
@@ -64,14 +69,6 @@ class UserController {
         this.tapService = tapService;
     }
 
-    public Boolean isUUID(String id) {
-        try {
-            UUID.fromString(id).toString().equals(id);
-            return true;
-        } catch (IllegalArgumentException | NullPointerException ex) {
-            return false;
-        }
-    }
 
     @RequestMapping({"/", "/home"})
     public String index(@CookieValue(value = "AuthKey", defaultValue = "0") String authKey, Model model){
@@ -79,9 +76,11 @@ class UserController {
             return "index/home";
         } else {
             User user = userService.findByAuthKey(authKey);
-            model.addAttribute("username", user.getUsername());
-            model.addAttribute("firstName", user.getFirstName());
-            model.addAttribute("lastName", user.getLastName());
+
+
+            //model.addAttribute("taps", tapService.listAll());
+            model.addAttribute("user", user);
+            model.addAttribute("profile", user);
             return "user/home";
         }
     }
@@ -124,10 +123,9 @@ class UserController {
         String authkey = AuthKey.create();
 
         User user = new User();
-        user.setId(UUID.randomUUID());
         user.setEmail(userForm.getEmail());
         user.setPassword(Hash256.convert(userForm.getPassword()));
-        user.setFirstName(userForm.getFirstName());
+        user.setFirstName("grge");
         user.setLastName(userForm.getLastName());
         user.setAuthKey(authkey);
 
@@ -207,7 +205,7 @@ class UserController {
                     return "redirect:/login";
                 } else {
 
-                    UUID userId = userService.userIdByEmail(userForm.getEmail());
+                    Long userId = userService.userIdByEmail(userForm.getEmail());
 
                     String authkey = AuthKey.create();
 
@@ -229,32 +227,21 @@ class UserController {
     }
 
     @RequestMapping("/user/delete/{id}")
-    public String delete(@PathVariable String id){
-        userService.delete(UUID.fromString(id));
+    public String delete(@PathVariable Long id){
+        userService.delete(id);
         return "redirect:/user/list";
     }
 
     @RequestMapping({"/user/{id}", "/u/{id}"})
-    public String viewUserProfile(@PathVariable String id, @CookieValue(value = "AuthKey", defaultValue = "0") String authKey, Model model, @Valid TapForm tapCreateForm, BindingResult bindingResult){
-        if(isUUID(id)) {
-            User user = userService.findByAuthKey(authKey);
-            User profile = userService.getById(UUID.fromString(id));
+    public String viewUserProfile(@PathVariable Long id, @CookieValue(value = "AuthKey", defaultValue = "0") String authKey, Model model, @Valid TapForm tapCreateForm, BindingResult bindingResult){
+        User user = userService.findByAuthKey(authKey);
+        User profile = userService.getById(id);
 
-            model.addAttribute("user", user);
-            model.addAttribute("profile", profile);
-            model.addAttribute("tapCreateForm", tapCreateForm);
-
-            model.addAttribute("taps", tapService.findByUserId(profile.getId()));
-            return "user/profile";
-        } else {
-            User user = userService.findByAuthKey(authKey);
-            model.addAttribute("user", user);
-            model.addAttribute("profile", user);
-            model.addAttribute("tapCreateForm", tapCreateForm);
-
-            model.addAttribute("taps", tapService.findByUserId(user.getId()));
-            return "user/profile";
-        }
+        model.addAttribute("user", user);
+        model.addAttribute("profile", profile);
+        model.addAttribute("tapCreateForm", tapCreateForm);
+        model.addAttribute("taps", tapService.findByUserId(profile.getId()));
+        return "user/profile";
     }
 
     @RequestMapping({"/profile", "/me", "/account"})
@@ -273,7 +260,6 @@ class UserController {
         User profile = userService.findByAuthKey(authKey);
 
         Tap tap = new Tap();
-        tap.setId(UUID.randomUUID());
         tap.setContent(tapForm.getContent());
         tap.setUserID(profile.getId());
         tap.setCreatedDate(new Date());

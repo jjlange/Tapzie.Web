@@ -12,7 +12,7 @@ import java.util.UUID;
  * Created by jt on 1/10/17.
  */
 public interface TapService {
-    List<Tap> findByUserId(UUID id);
+    List<Tap> findByUserId(Long id);
 
     Tap save(Tap tap);
 }

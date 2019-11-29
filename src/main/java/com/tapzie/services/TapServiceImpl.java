@@ -29,9 +29,10 @@ public class TapServiceImpl implements TapService {
 
 
     @Override
-    public List<Tap> findByUserId(UUID id) {
+    public List<Tap> findByUserId(Long id) {
         return tapRepository.findByUserId(id);
     }
+
 
     @Override
     public Tap save(Tap tap) {

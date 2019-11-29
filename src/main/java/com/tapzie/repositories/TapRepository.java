@@ -1,19 +1,19 @@
 package com.tapzie.repositories;
 
 import com.tapzie.entities.Tap;
-import com.tapzie.entities.User;
-import org.springframework.data.cassandra.repository.CassandraRepository;
-import org.springframework.data.cassandra.repository.Query;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
  * Created by Justin Lange on 1/10/17.
  */
-public interface TapRepository extends CassandraRepository<Tap, UUID> {
-    @Query("SELECT * FROM taps WHERE userid=?0 ORDER BY createdDate DESC;")
-    List<Tap> findByUserId(UUID id);
+public interface TapRepository extends CrudRepository<Tap, Long> {
+    @Query("SELECT t FROM Tap t WHERE t.userId=?1")
+    List<Tap> findByUserId(Long id);
+
+    /*@Query("SELECT t.content, t.createdDate, t.userId, u.firstName FROM Tap t INNER JOIN User u ON u.id = t.userId")
+    List<Tap> findAll(); -- not working yet --*/
 }

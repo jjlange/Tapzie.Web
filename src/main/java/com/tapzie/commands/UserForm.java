@@ -1,7 +1,5 @@
 package com.tapzie.commands;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import java.util.UUID;
 
 
@@ -9,7 +7,7 @@ import java.util.UUID;
  * Created by jt on 1/10/17.
  */
 public class UserForm {
-    private UUID id;
+    private Long id;
     private String email;
     private String password;
     private String username;
@@ -17,11 +15,11 @@ public class UserForm {
     private String lastName;
 
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

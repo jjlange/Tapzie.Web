@@ -3,15 +3,15 @@ package com.tapzie.commands;
 import java.util.UUID;
 
 public class TapForm {
-    private UUID id;
+    private Long id;
     private String content;
-    private UUID userId;
+    private Long userId;
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -23,11 +23,11 @@ public class TapForm {
         this.content = content;
     }
 
-    public UUID getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(UUID userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 }

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by jt on 1/10/17.
@@ -35,7 +34,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getById(UUID id) {
+    public User getById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
 
@@ -71,12 +70,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UUID userIdByEmail(String email) {
+    public Long userIdByEmail(String email) {
         return userRepository.userIdByEmail(email);
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         userRepository.deleteById(id);
 
     }

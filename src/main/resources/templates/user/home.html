@@ -51,7 +51,7 @@
                 <div class="relative text-sm">
 
                     <button id="userButton" class="flex items-center mr-3 shadow bg-orange-700 hover:bg-orange-500 focus:shadow-outline focus:outline-none text-white text-sm md:text-base font-bold py-2 px-4 rounded">
-                        <span th:text="'' + ${firstName}" /></span>&nbsp;<span th:text="'' + ${lastName}" /></span>
+                        <span th:text="'' + ${user.firstName}" /></span>&nbsp;<span th:text="'' + ${user.lastName}" /></span>
                         <svg class="pl-2 h-2 fill-current text-white" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129">
                             <g>
                                 <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z" />
@@ -80,7 +80,7 @@
 <!--Container-->
 <div class="container w-full flex flex-wrap mx-auto px-2 pt-8 lg:pt-16 mt-16">
     <div class="w-full lg:w-1/5 px-6 text-xl text-gray-800 leading-normal">
-        <p class="text-2xl font-bold py-2 text-gray-700">Hello, <span th:text="'' + ${firstName}" /></span>!</p>
+        <p class="text-2xl font-bold py-2 text-gray-700">Hello, <span th:text="'' + ${user.firstName}" /></span>!</p>
         &nbsp; <div class="rounded-lg py-1 px-2 bg-yellow-600 text-white font-black p-2 text-center -mt-8">GOLD</div>
         <div class="block lg:hidden sticky inset-0 pt-8">
             <button id="menu-toggle" class="flex w-full justify-end px-3 py-3 bg-white lg:bg-transparent border rounded border-gray-600 hover:border-orange-600 appearance-none focus:outline-none">
@@ -138,7 +138,7 @@
             </h2>
         </div>
         <div class="w-full border-l border-r border-b border-gray-700 rounded-bl rounded-br rounded-b flex flex-col justify-center items-center text-center p-6 bg-white">
-            <div class="text-md font-bold flex flex-col text-gray-900"><span class="uppercase" th:text="'What\'s up for today, ' + ${firstName} + '?'" /></span> <span class="font-normal text-gray-700 text-sm" th:text="${#dates.format(#dates.createNow(), 'dd / MMMM / YYYY')}">dd/MMM/YYYY</span></div>
+            <div class="text-md font-bold flex flex-col text-gray-900"><span class="uppercase" th:text="'What\'s up for today, ' + ${user.firstName} + '?'" /></span> <span class="font-normal text-gray-700 text-sm" th:text="${#dates.format(#dates.createNow(), 'dd / MMMM / YYYY')}">dd/MMM/YYYY</span></div>
 
             <div class="text-2xl font-bold text-gray-900 mb-6 mt-8">We couldn't find any suggestions for you. :(</div>
             <div class="flex justify-between w-full mt-4">
@@ -151,7 +151,40 @@
             </div>
         </div>
         <br />
-        <div id="map" class="w-full h-64 rounded-lg">
+        <h2 class="text-2xl pl-8">Public Taps</h2>
+        <!--<div th:each = "tap: ${taps}" class="flex border-b border-solid border-grey-light mt-4">
+            <div class="w-1/8 text-right pl-3 pt-3">
+                <div><a href="#"><img th:src="${profile.profilePicture}" alt="avatar" class="rounded-full h-12 w-12 mr-2"></a></div>
+            </div>
+            <div class="w-full p-3 pl-4">
+                <div class="flex -mb-2 justify-between">
+                    <div>
+                        <span class="font-bold"><a href="#" class="text-black" th:text="'' + ${tap.firstName} + ' ' + ${profile.lastName}"></a></span>
+                        <span class="text-grey-dark">&nbsp;·</span>
+                        <a href="" th:href="'/user/' + ${profile.id}" class="text-blue-400 hover:text-blue-500 pl-2" th:text="'@' + ${profile.username}"></a>
+                        <span class="text-grey-dark">&nbsp;·&nbsp;</span>
+                        <span class="text-grey-dark" th:text="${#dates.format(tap.createdDate, 'dd / MMM / YYYY')}">dd</span>
+                    </div>
+                    <div>
+                        <div class="TapListMenu">
+                            <a class="text-2xl float-right text-right" style="cursor:pointer;">
+                                <i class="fa fa-chevron-down"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-4 text-2xl">
+                    <p class="mb-6" th:text="'' + ${tap.content}"></p>
+                </div>
+                <div class="pb-2">
+                    <span class="mr-8"><a href="#" class="text-grey-dark hover:no-underline hover:text-blue-light"><i class="fa fa-comment fa-lg mr-2"></i> 0</a></span>
+                    <span class="mr-8"><a href="#" class="text-grey-dark hover:no-underline hover:text-green"><i class="fa fa-retweet fa-lg mr-2"></i> 0</a></span>
+                    <span class="mr-8"><a href="#" class="text-grey-dark hover:no-underline hover:text-red"><i class="fa fa-heart fa-lg mr-2"></i> 0</a></span>
+                </div>
+            </div>
+        </div>-->
+        <br />
+        <div id="map" class="w-full h-64 rounded-lg mb-4">
         </div>
     </section>
     <script>

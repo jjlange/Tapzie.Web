@@ -1,47 +1,54 @@
 package com.tapzie.entities;
 
-import com.datastax.driver.core.DataType;
-import jnr.ffi.annotations.In;
-import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
-import org.springframework.data.cassandra.core.mapping.*;
-import org.springframework.web.multipart.MultipartFile;
 
-
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.UUID;
 
 /**
  * Created by Justin Lange on 1/10/17.
  */
-@Table("users")
+@Entity()
+@Table(name="users")
 public class User implements Serializable{
+    @Id
+    @GeneratedValue
+    @Column(name="id")
+    private Long id;
 
-    @PrimaryKey
-    @CassandraType(type = DataType.Name.UUID)
-    private UUID id;
-
-    @Indexed
+    @Column(name="email")
     private String email;
 
-    @Indexed
+    @Column(name="password")
     private String password;
 
-    @Indexed
+    @Column(name="username")
     private String username;
 
-    @Indexed
+    @Column(name="authkey")
     private String authkey;
+
+    @Column(name="firstName")
     private String firstName;
+
+    @Column(name="lastName")
     private String lastName;
+
+    @Column(name="profilePicture")
     private String profilePicture;
+
+    @Column(name="profileBackgroundPicture")
     private String profileBackgroundPicture;
+
+    @Column(name="status")
     private Integer status;
+
+    @Column(name="verified")
     private boolean verified;
 
 
-    public UUID getId() { return id; }
+    public Long getId() { return id; }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
