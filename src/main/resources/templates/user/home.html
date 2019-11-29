@@ -153,7 +153,14 @@
                 </div>
             <br />
             <div class="pl-8 w-full lg:w-3/4 xl:w-3/4">
-            <h2 class="text-2xl">Public Taps</h2>
+                <div class="flex">
+                    <div class="w-1/2">
+                        <h2 class="text-2xl w-1/2">Public Taps</h2>
+                    </div>
+                    <div class="w-1/2">
+                        <button class="modal-open bg-transparent border border-gray-500 hover:border-indigo-500 text-gray-500 hover:text-indigo-500 font-bold w-40 h-10 rounded-full float-right mb-4">Create new Tap</button>
+                    </div>
+                </div>
                 <div th:each = "tap: ${taps}" class="flex mt-4">
                     <div class="w-1/8 text-right pl-3 pt-3">
                         <div><a href="#"><img th:src="${tap.getCreator().getProfilePicture()}" alt="avatar" class="rounded-full h-12 w-12 mr-2"></a></div>
@@ -349,6 +356,94 @@ $(window).scroll(function(){
    }
 });
 </script>
+<!--Modal-->
+<div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
+    <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
 
+    <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+
+        <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
+            <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+            </svg>
+            <span class="text-sm">(Esc)</span>
+        </div>
+
+        <!-- Add margin if you want to see some of the overlay behind the modal-->
+        <div class="modal-content py-4 text-left px-6">
+            <!--Title-->
+            <div class="flex justify-between items-center pb-3">
+                <p class="text-2xl font-bold">Create a new Tap</p><br />
+                <div class="modal-close cursor-pointer z-50">
+                    <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                        <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                    </svg>
+                </div>
+            </div>
+            <form class="mt-4" th:object="${tapCreateForm}" th:action="@{/create/tap}" method="post">
+
+
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                    Content:
+                </label>
+                <textarea class="appearance-none block w-full text-2xl bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" th:field="*{content}" th:errorclass="has-error" type="text" placeholder="What would you like to write about?" name="" value=""></textarea>
+                <input name="login" class="flex items-center shadow bg-gray-600 hover:bg-gray-700 focus:shadow-outline focus:outline-none text-white text-sm md:text-base font-bold py-2 px-4 mb-2 rounded float-right" type="submit" value="Create" />
+            </form>
+        </div>
+
+
+    </div>
+</div>
+</div>
+<!-- jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+<script>
+    var openmodal = document.querySelectorAll('.modal-open')
+    for (var i = 0; i < openmodal.length; i++) {
+      openmodal[i].addEventListener('click', function(event){
+    	event.preventDefault()
+    	toggleModal()
+      })
+    }
+
+    const overlay = document.querySelector('.modal-overlay')
+    overlay.addEventListener('click', toggleModal)
+
+    var closemodal = document.querySelectorAll('.modal-close')
+    for (var i = 0; i < closemodal.length; i++) {
+      closemodal[i].addEventListener('click', toggleModal)
+    }
+
+    document.onkeydown = function(evt) {
+      evt = evt || window.event
+      var isEscape = false
+      if ("key" in evt) {
+    	isEscape = (evt.key === "Escape" || evt.key === "Esc")
+      } else {
+    	isEscape = (evt.keyCode === 27)
+      }
+      if (isEscape && document.body.classList.contains('modal-active')) {
+    	toggleModal()
+      }
+    };
+
+
+    function toggleModal () {
+      const body = document.querySelector('body')
+      const modal = document.querySelector('.modal')
+      modal.classList.toggle('opacity-0')
+      modal.classList.toggle('pointer-events-none')
+      body.classList.toggle('modal-active')
+    }
+
+$(document).on('click', function(e) {
+  $('.TapListMenu > ul').hide();
+
+  if ($(e.target).parent().hasClass('TapListMenu')) {
+    $(e.target).siblings('ul').toggle();
+  }
+});
+  </script>
 </body>
 </html>

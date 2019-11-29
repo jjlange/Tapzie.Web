@@ -71,7 +71,7 @@ class UserController {
 
 
     @RequestMapping({"/", "/home"})
-    public String index(@CookieValue(value = "AuthKey", defaultValue = "0") String authKey, Model model){
+    public String index(@CookieValue(value = "AuthKey", defaultValue = "0") String authKey, Model model, @Valid TapForm tapCreateForm){
         if(userService.userCountByAuthKey(authKey) == 0) {
             return "index/home";
         } else {
@@ -80,6 +80,7 @@ class UserController {
 
             model.addAttribute("taps", tapService.listAll());
             model.addAttribute("user", user);
+            model.addAttribute("tapCreateForm", tapCreateForm);
             model.addAttribute("profile", user);
             return "user/home";
         }
