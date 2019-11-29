@@ -128,62 +128,66 @@
             Home
         </h1>
 
-        <!--divider-->
         <hr class="bg-gray-300 my-2 mb-8">
-        <!--Card-->
-        <div class="p-4 pl-8 mt-8 lg:mt-0 bg-gray-700 leading-normal rounded-tl rounded-tr rounded-t shadow bg-white">
-            <h2 id='section1' class="font-sans font-bold break-normal text-white text-2xl">
-                Dashboard
-            </h2>
-        </div>
-        <div class="w-full border-l border-r border-b border-gray-700 rounded-bl rounded-br rounded-b flex flex-col justify-center items-center text-center p-6 bg-white">
-            <div class="text-md font-bold flex flex-col text-gray-900"><span class="uppercase" th:text="'What\'s up for today, ' + ${user.firstName} + '?'" /></span> <span class="font-normal text-gray-700 text-sm" th:text="${#dates.format(#dates.createNow(), 'dd / MMMM / YYYY')}">dd/MMM/YYYY</span></div>
-
-            <div class="text-2xl font-bold text-gray-900 mb-6 mt-8">We couldn't find any suggestions for you. :(</div>
-            <div class="flex justify-between w-full mt-4">
-                <div class="flex items-center text-gray-700 px-2">
-                    Link 1
+        <div class="flex">
+            <div class="w-full lg:w-2/4 xl:w-2/4">
+                <!--Card-->
+                <div class="p-4 mt-8 lg:mt-0 bg-gray-700 leading-normal rounded-tl rounded-tr rounded-t shadow bg-white">
+                    <h2 id='section1' class="font-sans font-bold break-normal text-white text-2xl">
+                        Dashboard
+                    </h2>
                 </div>
-                <div class="flex items-center text-gray-700 px-2">
-                    Link 2
-                </div>
-            </div>
-        </div>
-        <br />
-        <h2 class="text-2xl pl-8">Public Taps</h2>
-        <div th:each = "tap: ${taps}" class="flex border-b border-solid border-grey-light mt-4">
-            <div class="w-1/8 text-right pl-3 pt-3">
-                <div><a href="#"><img th:src="${tap.getCreator().getProfilePicture()}" alt="avatar" class="rounded-full h-12 w-12 mr-2"></a></div>
-            </div>
-            <div class="w-full p-3 pl-4">
-                <div class="flex -mb-2 justify-between">
-                    <div>
-                        <span class="font-bold"><a href="#" class="text-black" th:text="'' + ${tap.getCreator().getFirstName()} + ' ' + ${tap.getCreator().getLastName()}"></a></span>
-                        <span class="text-grey-dark">&nbsp;·</span>
-                        <a href="" th:href="'/user/' + ${tap.getCreator().getId()}" class="text-blue-400 hover:text-blue-500 pl-2" th:text="'@' + ${tap.getCreator().getUsername()}"></a>
-                        <span class="text-grey-dark">&nbsp;·&nbsp;</span>
-                        <span class="text-grey-dark" th:text="${#dates.format(tap.createdDate, 'dd / MMM / YYYY')}">dd</span>
+                <div class="w-full border-l border-r border-b border-gray-700 rounded-bl rounded-br rounded-b flex flex-col justify-center items-center text-center p-6 bg-white">
+                    <div class="text-md font-bold flex flex-col text-gray-900"><span class="uppercase" th:text="'What\'s up for today, ' + ${user.firstName} + '?'" /></span> <span class="font-normal text-gray-700 text-sm" th:text="${#dates.format(#dates.createNow(), 'dd / MMMM / YYYY')}">dd/MMM/YYYY</span>
                     </div>
-                    <div>
-                        <div class="TapListMenu">
-                            <a class="text-2xl float-right text-right" style="cursor:pointer;">
-                                <i class="fa fa-chevron-down"></i>
-                            </a>
+                    <div class="text-2xl font-bold text-gray-900 mb-6 mt-8">We couldn't find any suggestions for you. :(</div>
+                        <div class="flex justify-between w-full mt-4">
+                            <div class="flex items-center text-gray-700 px-2">
+                                Link 1
+                            </div>
+                            <div class="flex items-center text-gray-700 px-2">
+                                Link 2
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="mb-4 text-2xl">
-                    <p class="mb-6" th:text="'' + ${tap.getContent()}"></p>
-                </div>
-                <div class="pb-2">
-                    <span class="mr-8"><a href="#" class="text-grey-dark hover:no-underline hover:text-blue-light"><i class="fa fa-comment fa-lg mr-2"></i> 0</a></span>
-                    <span class="mr-8"><a href="#" class="text-grey-dark hover:no-underline hover:text-green"><i class="fa fa-retweet fa-lg mr-2"></i> 0</a></span>
-                    <span class="mr-8"><a href="#" class="text-grey-dark hover:no-underline hover:text-red"><i class="fa fa-heart fa-lg mr-2"></i> 0</a></span>
+            <br />
+            <div class="pl-8 w-full lg:w-3/4 xl:w-3/4">
+            <h2 class="text-2xl">Public Taps</h2>
+                <div th:each = "tap: ${taps}" class="flex mt-4">
+                    <div class="w-1/8 text-right pl-3 pt-3">
+                        <div><a href="#"><img th:src="${tap.getCreator().getProfilePicture()}" alt="avatar" class="rounded-full h-12 w-12 mr-2"></a></div>
+                    </div>
+                <div class="w-full p-3 pl-4">
+                    <div class="flex -mb-2 justify-between">
+                        <div>
+                            <span class="font-bold"><a href="#" class="text-black" th:text="'' + ${tap.getCreator().getFirstName()} + ' ' + ${tap.getCreator().getLastName()}"></a></span>
+                            <span class="text-grey-dark">&nbsp;·</span>
+                            <a href="" th:href="'/user/' + ${tap.getCreator().getId()}" class="text-blue-400 hover:text-blue-500 pl-2" th:text="'@' + ${tap.getCreator().getUsername()}"></a>
+                            <span class="text-grey-dark">&nbsp;·&nbsp;</span>
+                            <span class="text-grey-dark" th:text="${#dates.format(tap.createdDate, 'dd / MMM / YYYY')}">dd</span>
+                        </div>
+                        <div>
+                            <div class="TapListMenu">
+                                <a class="text-2xl float-right text-right" style="cursor:pointer;">
+                                    <i class="fa fa-chevron-down"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-4 text-2xl">
+                        <p class="mb-6" th:text="'' + ${tap.getContent()}"></p>
+                    </div>
+                    <div class="pb-2">
+                        <span class="mr-8"><a href="#" class="text-grey-dark hover:no-underline hover:text-blue-light"><i class="fa fa-comment fa-lg mr-2"></i> 0</a></span>
+                        <span class="mr-8"><a href="#" class="text-grey-dark hover:no-underline hover:text-red"><i class="fa fa-heart fa-lg mr-2"></i> 0</a></span>
+                    </div>
                 </div>
             </div>
-        </div>-
+            </div>
+        </div>
         <br />
-        <div id="map" class="w-full h-64 rounded-lg mb-4">
+        <div id="map" class="w-full h-64 rounded-lg mb-8 mt-8">
         </div>
     </section>
     <script>
