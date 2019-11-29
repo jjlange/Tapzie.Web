@@ -35,6 +35,12 @@ public class TapServiceImpl implements TapService {
 
 
     @Override
+    public List<Tap> listAll() {
+        return tapRepository.findAll();
+    }
+
+
+    @Override
     public Tap save(Tap tap) {
         return tapRepository.save(tap);
     }

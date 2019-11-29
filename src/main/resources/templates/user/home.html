@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" class="antialiased">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -152,16 +151,16 @@
         </div>
         <br />
         <h2 class="text-2xl pl-8">Public Taps</h2>
-        <!--<div th:each = "tap: ${taps}" class="flex border-b border-solid border-grey-light mt-4">
+        <div th:each = "tap: ${taps}" class="flex border-b border-solid border-grey-light mt-4">
             <div class="w-1/8 text-right pl-3 pt-3">
-                <div><a href="#"><img th:src="${profile.profilePicture}" alt="avatar" class="rounded-full h-12 w-12 mr-2"></a></div>
+                <div><a href="#"><img th:src="${tap.getCreator().getProfilePicture()}" alt="avatar" class="rounded-full h-12 w-12 mr-2"></a></div>
             </div>
             <div class="w-full p-3 pl-4">
                 <div class="flex -mb-2 justify-between">
                     <div>
-                        <span class="font-bold"><a href="#" class="text-black" th:text="'' + ${tap.firstName} + ' ' + ${profile.lastName}"></a></span>
+                        <span class="font-bold"><a href="#" class="text-black" th:text="'' + ${tap.getCreator().getFirstName()} + ' ' + ${tap.getCreator().getLastName()}"></a></span>
                         <span class="text-grey-dark">&nbsp;·</span>
-                        <a href="" th:href="'/user/' + ${profile.id}" class="text-blue-400 hover:text-blue-500 pl-2" th:text="'@' + ${profile.username}"></a>
+                        <a href="" th:href="'/user/' + ${tap.getCreator().getId()}" class="text-blue-400 hover:text-blue-500 pl-2" th:text="'@' + ${tap.getCreator().getUsername()}"></a>
                         <span class="text-grey-dark">&nbsp;·&nbsp;</span>
                         <span class="text-grey-dark" th:text="${#dates.format(tap.createdDate, 'dd / MMM / YYYY')}">dd</span>
                     </div>
@@ -174,7 +173,7 @@
                     </div>
                 </div>
                 <div class="mb-4 text-2xl">
-                    <p class="mb-6" th:text="'' + ${tap.content}"></p>
+                    <p class="mb-6" th:text="'' + ${tap.getContent()}"></p>
                 </div>
                 <div class="pb-2">
                     <span class="mr-8"><a href="#" class="text-grey-dark hover:no-underline hover:text-blue-light"><i class="fa fa-comment fa-lg mr-2"></i> 0</a></span>
@@ -182,7 +181,7 @@
                     <span class="mr-8"><a href="#" class="text-grey-dark hover:no-underline hover:text-red"><i class="fa fa-heart fa-lg mr-2"></i> 0</a></span>
                 </div>
             </div>
-        </div>-->
+        </div>-
         <br />
         <div id="map" class="w-full h-64 rounded-lg mb-4">
         </div>

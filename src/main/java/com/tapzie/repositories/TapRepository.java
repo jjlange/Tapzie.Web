@@ -14,6 +14,5 @@ public interface TapRepository extends CrudRepository<Tap, Long> {
     @Query("SELECT t FROM Tap t WHERE t.userId=?1")
     List<Tap> findByUserId(Long id);
 
-    /*@Query("SELECT t.content, t.createdDate, t.userId, u.firstName FROM Tap t INNER JOIN User u ON u.id = t.userId")
-    List<Tap> findAll(); -- not working yet --*/
+    List<Tap> findAll();
 }

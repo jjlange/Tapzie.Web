@@ -78,7 +78,7 @@ class UserController {
             User user = userService.findByAuthKey(authKey);
 
 
-            //model.addAttribute("taps", tapService.listAll());
+            model.addAttribute("taps", tapService.listAll());
             model.addAttribute("user", user);
             model.addAttribute("profile", user);
             return "user/home";

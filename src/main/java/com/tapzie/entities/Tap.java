@@ -31,7 +31,7 @@ public class Tap implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", insertable = false, updatable = false)
     @Fetch(FetchMode.JOIN)
-    private User user;
+    private User creator;
 
     public Tap() {
     }
@@ -63,4 +63,12 @@ public class Tap implements Serializable {
     }
 
     public Date getCreatedDate(){ return createdDate; }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
 }

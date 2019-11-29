@@ -13,6 +13,7 @@ import java.util.UUID;
  */
 public interface TapService {
     List<Tap> findByUserId(Long id);
+    List<Tap> listAll();
 
     Tap save(Tap tap);
 }
