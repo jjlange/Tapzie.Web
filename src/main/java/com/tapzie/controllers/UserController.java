@@ -4,9 +4,12 @@ import com.tapzie.commands.TapForm;
 import com.tapzie.commands.UserForm;
 import com.tapzie.converters.UserToUserForm;
 import com.tapzie.entities.Tap;
+import com.tapzie.entities.TapLike;
 import com.tapzie.entities.User;
 import com.tapzie.repositories.TapRepository;
 import com.tapzie.services.StorageService;
+
+import com.tapzie.services.TapLikeService;
 import com.tapzie.services.TapService;
 import com.tapzie.services.UserService;
 import com.tapzie.utilities.AuthKey;
@@ -39,9 +42,9 @@ class UserController {
     private String imgCDNPath;
 
     private UserService userService;
+    private TapLikeService tapLikeService;
 
     private TapService tapService;
-    private TapRepository tapRepository;
 
     private UserToUserForm userToUserForm;
 
@@ -69,6 +72,10 @@ class UserController {
         this.tapService = tapService;
     }
 
+    @Autowired
+    public void setTapLikeService(TapLikeService tapLikeService) {
+        this.tapLikeService = tapLikeService;
+    }
 
     @RequestMapping({"/", "/home"})
     public String index(@CookieValue(value = "AuthKey", defaultValue = "0") String authKey, Model model, @Valid TapForm tapCreateForm){
@@ -126,7 +133,7 @@ class UserController {
         User user = new User();
         user.setEmail(userForm.getEmail());
         user.setPassword(Hash256.convert(userForm.getPassword()));
-        user.setFirstName("grge");
+        user.setFirstName(userForm.getFirstName());
         user.setLastName(userForm.getLastName());
         user.setAuthKey(authkey);
 
@@ -231,6 +238,24 @@ class UserController {
     public String delete(@PathVariable Long id){
         userService.delete(id);
         return "redirect:/user/list";
+    }
+
+    @RequestMapping("/like/tap/{id}")
+    public String likeTap(@CookieValue(value = "AuthKey", defaultValue = "0") String authKey,@PathVariable Long id){
+        User user = userService.findByAuthKey(authKey);
+        Integer likeCount = tapLikeService.likesCountByuserId(user.getId(), id);
+        Long likeId = tapLikeService.getLikeId(user.getId(), id);
+        if(likeCount == 1) {
+            tapLikeService.delete(likeId);
+            tapService.removeLike(id);
+        } else {
+            TapLike like = new TapLike();
+            like.setTapId(id);
+            like.setUserId(user.getId());
+            tapLikeService.save(like);
+            tapService.addLike(id);
+        }
+        return "redirect:/home";
     }
 
     @RequestMapping({"/user/{id}", "/u/{id}"})

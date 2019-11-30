@@ -18,6 +18,7 @@ public class Tap implements Serializable {
     @Column(name="id")
     private Long id;
 
+    @Lob
     @Column(name="content")
     private String content;
 
@@ -32,6 +33,9 @@ public class Tap implements Serializable {
     @JoinColumn(name = "userId", insertable = false, updatable = false)
     @Fetch(FetchMode.JOIN)
     private User creator;
+
+    @Column(name="likes")
+    private Long likes;
 
     public Tap() {
     }
@@ -70,5 +74,13 @@ public class Tap implements Serializable {
 
     public void setCreator(User creator) {
         this.creator = creator;
+    }
+
+    public Long getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Long likes) {
+        this.likes = likes;
     }
 }

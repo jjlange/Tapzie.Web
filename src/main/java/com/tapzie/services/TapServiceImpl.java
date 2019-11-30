@@ -45,4 +45,14 @@ public class TapServiceImpl implements TapService {
         return tapRepository.save(tap);
     }
 
+
+    @Override
+    public void addLike(Long tapId) {
+        tapRepository.addLike(tapId);
+    }
+
+    @Override
+    public void removeLike(Long tapId) {
+        tapRepository.removeLike(tapId);
+    }
 }

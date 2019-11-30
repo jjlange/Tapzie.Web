@@ -187,7 +187,7 @@
                     </div>
                     <div class="pb-2">
                         <span class="mr-8"><a href="#" class="text-grey-dark hover:no-underline hover:text-blue-light"><i class="fa fa-comment fa-lg mr-2"></i> 0</a></span>
-                        <span class="mr-8"><a href="#" class="text-grey-dark hover:no-underline hover:text-red"><i class="fa fa-heart fa-lg mr-2"></i> 0</a></span>
+                        <span class="mr-8"><a href="" th:href="'/like/tap/' + ${tap.getId()}" th:utext="'<i class=\'fa fa-heart fa-lg mr-2 text-red-600\'></i> ' + ${tap.getLikes()}" class="text-grey-dark hover:no-underline hover:text-red">0</a></span>
                     </div>
                 </div>
             </div>
