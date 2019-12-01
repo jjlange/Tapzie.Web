@@ -3,20 +3,16 @@ package com.tapzie.controllers;
 import com.tapzie.commands.TapForm;
 import com.tapzie.commands.UserForm;
 import com.tapzie.converters.UserToUserForm;
+import com.tapzie.entities.Friend;
 import com.tapzie.entities.Tap;
 import com.tapzie.entities.TapLike;
 import com.tapzie.entities.User;
-import com.tapzie.repositories.TapRepository;
-import com.tapzie.services.StorageService;
+import com.tapzie.services.*;
 
-import com.tapzie.services.TapLikeService;
-import com.tapzie.services.TapService;
-import com.tapzie.services.UserService;
 import com.tapzie.utilities.AuthKey;
 import com.tapzie.utilities.Hash256;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,11 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.lang.reflect.Array;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -43,7 +36,7 @@ class UserController {
 
     private UserService userService;
     private TapLikeService tapLikeService;
-
+    private FriendService friendService;
     private TapService tapService;
 
     private UserToUserForm userToUserForm;
@@ -75,6 +68,11 @@ class UserController {
     @Autowired
     public void setTapLikeService(TapLikeService tapLikeService) {
         this.tapLikeService = tapLikeService;
+    }
+
+    @Autowired
+    public void setFriendService(FriendService friendService) {
+        this.friendService = friendService;
     }
 
     @RequestMapping({"/", "/home"})
@@ -271,6 +269,19 @@ class UserController {
 
         model.addAttribute("user", user);
         model.addAttribute("profile", profile);
+
+        if(user.getId() != id) {
+            if(friendService.friendsCountByuserId(user.getId(), id) == 1){
+                if(friendService.friendsCountByuserId(id, user.getId()) == 1) {
+                    model.addAttribute("isFriend", true);
+                }
+            } else {
+                model.addAttribute("isFriend", false);
+            }
+        } else {
+            model.addAttribute("isFriend", false);
+        }
+
         model.addAttribute("tapCreateForm", tapCreateForm);
         model.addAttribute("taps", tapService.findByUserId(profile.getId()));
         return "user/profile";
@@ -336,6 +347,35 @@ class UserController {
         }
     }
 
+    @RequestMapping("/friends/add/{id}")
+    public String addFriend(@PathVariable Long id, @CookieValue(value = "AuthKey", defaultValue = "0") String authKey, Model model, @Valid TapForm tapCreateForm, BindingResult bindingResult){
+        User user = userService.findByAuthKey(authKey);
+        User profile = userService.getById(id);
 
+        Long userId = user.getId();
+        Long profileId = profile.getId();
+
+        if(profileId == userId) {
+            return "redirect:/profile";
+        } else {
+            if(friendService.friendsCountByuserId(profileId, userId) == 0) {
+                Friend userFriend = new Friend();
+                userFriend.setUserId(profileId);
+                userFriend.setFriendId(userId);
+                userFriend.setStatus(false);
+
+                Friend profileFriend = new Friend();
+                profileFriend.setUserId(userId);
+                profileFriend.setFriendId(profileId);
+                profileFriend.setStatus(true);
+
+                friendService.saveOrUpdate(profileFriend);
+                friendService.saveOrUpdate(userFriend);
+                return "redirect:/profile/" + profile.getId();
+            } else {
+                return "redirect:/profile/" + profile.getId();
+            }
+        }
+    }
 
 }

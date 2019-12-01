@@ -151,6 +151,12 @@
                     <a th:if="${user.id == profile.id}" href="/profile/edit" id='' class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-6 border border-gray-400 rounded shadow text-base">
                         Edit Your Profile
                     </a>
+                    <a th:if="${isFriend == false}" href="/friends/add/" th:href="'/friends/add/' + ${profile.id}" id='' class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-6 border border-gray-400 rounded shadow text-base">
+                        Send friend request
+                    </a>
+                    <a th:if="${isFriend == true}" href="/friends/remove/" th:href="'/friends/remove/' + ${profile.id}" id='' class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-6 border border-gray-400 rounded shadow text-base">
+                        Remove as friend
+                    </a>
                 </h2></div>
             <div class="w-1/4 md:w-3/4 xl:w-3/4 text-right float-right mt-3 pr-3">
                 <a th:if="${user.id == profile.id}" href="/Account/ProfileBackground/Change" id='' class="">
