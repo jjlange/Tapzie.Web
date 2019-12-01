@@ -35,10 +35,10 @@
 
 <nav id="header" class="bg-white fixed w-full z-10 top-0 shadow">
 
-    <div class="w-full container mx-auto flex flex-wrap items-center justify-between my-4">
+    <div class="w-full container mx-auto flex flex-wrap items-center justify-between my-1">
 
         <div class="pl-6 md:pl-6">
-            <a class="flex items-center text-orange-600 text-4xl xl:text-4xl no-underline hover:no-underline font-black font-sans" href="#" style="font-family: 'Cera Pro';font-weight: 900;">
+            <a class="flex items-center text-gray-700 text-4xl xl:text-4xl no-underline hover:no-underline font-black font-sans" href="#">
                 Tapzie
             </a>
         </div>
@@ -49,7 +49,7 @@
 
                 <div class="relative text-sm">
 
-                    <button id="userButton" class="flex items-center mr-3 shadow bg-orange-700 hover:bg-orange-500 focus:shadow-outline focus:outline-none text-white text-sm md:text-base font-bold py-2 px-4 rounded">
+                    <button id="userButton" class="flex items-center mr-3 shadow bg-gray-600 hover:bg-gray-700 focus:shadow-outline focus:outline-none text-white text-sm md:text-base font-bold py-2 px-4 rounded">
                         <span th:text="'' + ${user.firstName}" /></span>&nbsp;<span th:text="'' + ${user.lastName}" /></span>
                         <svg class="pl-2 h-2 fill-current text-white" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129">
                             <g>
@@ -60,12 +60,12 @@
 
                     <div id="userMenu" class="bg-white rounded shadow-md mt-2 mr-2 absolute mt-12 top-0 right-0 min-w-full overflow-auto z-30 invisible">
                         <ul class="list-reset">
-                            <li><a href="/account" class="px-4 py-2 block hover:bg-gray-400 no-underline hover:no-underline">My Account</a></li>
-                            <li><a href="/notification" class="px-4 py-2 block hover:bg-gray-400 no-underline hover:no-underline">Notifications</a></li>
+                            <li><a href="/profile" class="px-4 py-2 block hover:bg-gray-400 no-underline hover:no-underline">My Account</a></li>
+                            <li><a href="/notifications" class="px-4 py-2 block hover:bg-gray-400 no-underline hover:no-underline">Notifications</a></li>
                             <li>
                                 <hr class="border-t mx-2 border-gray-400">
                             </li>
-                            <li><a href="/logout" class="px-4 py-2 block text-orange-600 font-bold hover:bg-orange-600 hover:text-white no-underline hover:no-underline">Sign out</a></li>
+                            <li><a href="/logout" class="px-4 py-2 block text-gray-700 font-bold hover:bg-gray-700 hover:text-white no-underline hover:no-underline">Sign out</a></li>
                         </ul>
                     </div>
                 </div>
@@ -77,12 +77,12 @@
     </div>
 </nav>
 <!--Container-->
-<div class="container w-full flex flex-wrap mx-auto px-2 pt-8 lg:pt-16 mt-16">
-    <div class="w-full lg:w-1/5 px-6 text-xl text-gray-800 leading-normal">
+<div id="app" class="container w-full flex flex-wrap mx-auto px-2 pt-12 lg:pt-16 mt-8">
+    <div class="w-full lg:w-1/5 px-6 text-xl text-gray-800 leading-normal ">
         <p class="text-2xl font-bold py-2 text-gray-700">Hello, <span th:text="'' + ${user.firstName}" /></span>!</p>
         &nbsp; <div class="rounded-lg py-1 px-2 bg-yellow-600 text-white font-black p-2 text-center -mt-8">GOLD</div>
         <div class="block lg:hidden sticky inset-0 pt-8">
-            <button id="menu-toggle" class="flex w-full justify-end px-3 py-3 bg-white lg:bg-transparent border rounded border-gray-600 hover:border-orange-600 appearance-none focus:outline-none">
+            <button id="menu-toggle" class="flex w-full justify-end px-3 py-3 bg-white lg:bg-transparent border rounded border-teal-600 hover:border-orange-600 appearance-none focus:outline-none">
                 <svg class="fill-current h-3 float-right" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                 </svg>
@@ -90,29 +90,29 @@
         </div>
         <div class="w-full sticky inset-0 hidden max-h-18em lg:h-auto overflow-x-hidden overflow-y-auto lg:overflow-y-hidden lg:block mt-8 my-6 lg:my-6 border border-gray-400 lg:border-transparent bg-white shadow lg:shadow-none lg:bg-transparent z-20" style="top:6em;" id="menu-content">
             <ul class="list-reset py-2 md:py-0">
-                <li class="py-1 md:my-2 hover:bg-orange-100 lg:hover:bg-transparent border-l-4 border-transparent font-bold border-orange-600">
-                    <a href='#section1' class="block pl-4 align-middle text-gray-700 no-underline hover:text-orange-600">
+                <li class="py-1 md:my-2 hover:bg-orange-100 lg:hover:bg-transparent border-l-4 border-transparent">
+                    <a href='/home' class="block pl-4 align-middle text-gray-700 no-underline hover:text-gray-800 border-l-4 hover:border-gray-800">
                         <span class="pb-1 md:pb-0 text-2xl"><i class="fas fa-home pr-4"></i>Home</span>
                     </a>
                 </li>
                 <li class="py-4 md:my-2 hover:bg-orange-100 lg:hover:bg-transparent border-l-4 border-transparent">
-                    <a href='#section2' class="block pl-4 align-middle text-gray-700 no-underline hover:text-orange-600">
+                    <a href='/courses' class="block pl-4 align-middle text-gray-700 no-underline hover:text-gray-800 border-l-4 hover:border-gray-800">
                         <span class="pb-1 md:pb-0 text-2xl"><i class="fas fa-graduation-cap pr-4"></i>Courses</span>
                     </a>
                 </li>
                 <li class="py-4 md:my-2 hover:bg-orange-100 lg:hover:bg-transparent border-l-4 border-transparent">
-                    <a href='#section3' class="block pl-4 align-middle text-gray-700 no-underline hover:text-orange-600">
+                    <a href='/messages' class="block pl-4 align-middle text-gray-700 no-underline hover:text-gray-800 border-l-4 hover:border-gray-800">
                         <span class="pb-1 md:pb-0 text-2xl"><i class="fas fa-envelope pr-6"></i>Messages</span>
                     </a>
                 </li>
                 <li class="py-4 md:my-2 hover:bg-orange-100 lg:hover:bg-transparent border-l-4 border-transparent">
-                    <a href='#section4' class="block pl-4 align-middle text-gray-700 no-underline hover:text-orange-600">
+                    <a href='/friends' class="block pl-4 align-middle text-gray-700 no-underline hover:text-gray-800 border-l-4 hover:border-gray-800">
                         <span class="pb-1 md:pb-0 text-2xl"><i class="fas fa-users pr-4"></i>Friends</span>
                     </a>
                 </li>
 
                 <li class="py-4 md:my-2 hover:bg-orange-100 lg:hover:bg-transparent border-l-4 border-transparent">
-                    <a href='#section5' class="block pl-4 align-middle text-gray-700 no-underline hover:text-orange-600">
+                    <a href='/help' class="block pl-4 align-middle text-gray-700 no-underline hover:text-gray-800 border-l-4 hover:border-gray-800">
                         <span class="pb-1 md:pb-0 text-2xl"><i class="fas fa-question-circle pr-6"></i>Help</span>
                     </a>
                 </li>

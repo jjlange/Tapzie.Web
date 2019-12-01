@@ -123,30 +123,36 @@ class UserController {
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public String saveOrUpdateUser(HttpServletResponse response, @Valid UserForm userForm, BindingResult bindingResult, @RequestParam(value = "file") MultipartFile image) throws NoSuchAlgorithmException {
+    public String saveOrUpdateUser(HttpServletResponse response, @Valid UserForm userForm, Model model, BindingResult bindingResult, @RequestParam(value = "file") MultipartFile image) throws NoSuchAlgorithmException {
         if(bindingResult.hasErrors()){
             return "user/login";
         }
 
         String authkey = AuthKey.create();
 
-        User user = new User();
-        user.setEmail(userForm.getEmail());
-        user.setPassword(Hash256.convert(userForm.getPassword()));
-        user.setFirstName(userForm.getFirstName());
-        user.setLastName(userForm.getLastName());
-        user.setAuthKey(authkey);
+        Integer userCount = userService.userCountByEmail(userForm.getEmail());
+        if(userCount == 1) {
+            model.addAttribute("error_already_registered", true);
+            return "user/signup/index";
+        } else {
+            User user = new User();
+            user.setEmail(userForm.getEmail());
+            user.setPassword(Hash256.convert(userForm.getPassword()));
+            user.setFirstName(userForm.getFirstName());
+            user.setLastName(userForm.getLastName());
+            user.setAuthKey(authkey);
 
-        UUID fileNameUUID = UUID.randomUUID();
-        storageService.uploadFile(image, fileNameUUID + image.getOriginalFilename());
-        user.setProfilePicture(imgCDNPath + fileNameUUID + image.getOriginalFilename());
-        userService.saveOrUpdate(user);
+            UUID fileNameUUID = UUID.randomUUID();
+            storageService.uploadFile(image, fileNameUUID + image.getOriginalFilename());
+            user.setProfilePicture(imgCDNPath + fileNameUUID + image.getOriginalFilename());
+            userService.saveOrUpdate(user);
 
 
-        Cookie cookie = new Cookie("AuthKey", authkey);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-        return "redirect:/signup/username";
+            Cookie cookie = new Cookie("AuthKey", authkey);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+            return "redirect:/signup/username";
+        }
     }
 
     @RequestMapping(value="/signup/username", method=RequestMethod.POST)
@@ -289,6 +295,7 @@ class UserController {
         tap.setContent(tapForm.getContent());
         tap.setUserID(profile.getId());
         tap.setCreatedDate(new Date());
+        tap.setLikes(new Long(0));
         tapService.save(tap);
         return "redirect:/user/" + profile.getId();
     }
